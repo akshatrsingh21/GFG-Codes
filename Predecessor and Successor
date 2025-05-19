@@ -1,0 +1,55 @@
+class Solution {
+  public:
+    Node *rightmost(Node* curr)
+    {
+        Node* node=curr;
+        while(node->right!=nullptr)
+        {
+            node=node->right;
+        }
+        return node;
+    }
+    
+    Node *leftmost(Node* curr)
+    {
+        Node* node=curr;
+        while(node->left!=nullptr)
+        {
+            node=node->left;
+        }
+        return node;
+    }
+    
+    vector<Node*> findPreSuc(Node* root, int key) {
+        Node* curr=root;
+        Node* pre=nullptr;
+        Node* suc=nullptr;
+        
+        while(curr!=nullptr)
+        {
+            if(curr->data < key)
+            {
+                pre=curr;
+                curr=curr->right;
+            }
+            else if(curr->data > key)
+            {
+                suc=curr;
+                curr=curr->left;
+            }
+            else
+            {
+                if(curr->left!=nullptr)
+                {
+                    pre=rightmost(curr->left);
+                }
+                if(curr->right!=nullptr)
+                {
+                    suc=leftmost(curr->right);
+                }
+                break;
+            }
+        }
+        return {pre,suc};
+    }
+};
