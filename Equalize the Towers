@@ -1,0 +1,22 @@
+class Solution {
+public:
+    int minCost(vector<int>& heights, vector<int>& cost) {
+        int n = heights.size();
+
+        long long result = LLONG_MAX;  // will hold the minimum cost found
+
+        // Try each tower's height as the target height
+        for (int i = 0; i < n; i++) {
+            long long total = 0;  // cost to make all towers height = heights[i]
+
+            // Calculate cost to equalize every tower to heights[i]
+            for (int j = 0; j < n; j++) {
+                total += abs(heights[j] - heights[i]) * cost[j];
+            }
+
+            result = min(result, total);  // update minimum cost if this is lower
+        }
+
+        return (int)result;  // cast back to int for GfG signature
+    }
+};
