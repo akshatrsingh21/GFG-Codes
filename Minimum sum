@@ -1,0 +1,55 @@
+class Solution {
+public:
+
+    // Helper function to add two numbers represented as strings
+    string addString(string& s1, string& s2) {
+        int    i      = s1.length() - 1; // pointer for s1
+        int    j      = s2.length() - 1; // pointer for s2
+        int    c      = 0;               // carry
+        string result = "";              // to store result
+
+        // Loop till both strings and carry are processed
+        while (i >= 0 || j >= 0 || c > 0) {
+            int sum = c;  // initialize with carry
+
+            if (i >= 0) {
+                sum += (s1[i] - '0');  // add digit from s1 if exists
+            }
+
+            if (j >= 0) {
+                sum += (s2[j] - '0');  // add digit from s2 if exists
+            }
+
+            result.push_back(sum % 10 + '0'); // add current digit
+            c = sum / 10;                     // update carry
+            i--; j--;                         // move pointers
+        }
+
+        // Remove leading zeros from the end
+        while (!result.empty() && result.back() == '0') {
+            result.pop_back();
+        }
+
+        // Reverse the result to get final number
+        reverse(result.begin(), result.end());
+
+        return result;
+    }
+
+    string minSum(vector<int>& arr) {
+        sort(arr.begin(), arr.end()); // sort digits in ascending order
+
+        string s1 = "";               // to build first number
+        string s2 = "";               // to build second number
+
+        for (int i = 0; i < arr.size(); i++) {
+            if (i % 2 == 0) {
+                s1.push_back(arr[i] + '0');  // alternate digits go to s1
+            } else {
+                s2.push_back(arr[i] + '0');  // rest go to s2
+            }
+        }
+
+        return addString(s1, s2);  // return their sum
+    }
+};
