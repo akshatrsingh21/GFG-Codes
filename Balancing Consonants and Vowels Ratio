@@ -1,0 +1,30 @@
+class Solution {
+public:
+    int countBalanced(vector<string> &arr) {
+        unordered_map<int, int> diffCount;
+        diffCount[0] = 1; // base case
+
+        int result = 0;
+        int diff = 0; // diff = vowel_count - consonant_count
+
+        for (string &s : arr) {
+            for (char ch : s) {
+                if (isVowel(ch)) {
+                    diff += 1;
+                } else {
+                    diff -= 1;
+                }
+            }
+            result += diffCount[diff];
+            diffCount[diff]++;
+        }
+
+        return result;
+    }
+
+private:
+    bool isVowel(char ch) {
+        return ch == 'a' || ch == 'e' || ch == 'i' ||
+               ch == 'o' || ch == 'u';
+    }
+};
