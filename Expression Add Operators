@@ -1,0 +1,46 @@
+class Solution {
+public:
+    vector<string> ans;
+
+    vector<string> findExpr(string s, int target) {
+        string path = "";
+        backtrack(s, target, 0, 0, 0, path);
+        sort(ans.begin(), ans.end()); // sort lexicographically as required
+        return ans;
+    }
+
+private:
+    void backtrack(string& s, long long target, int pos,
+                   long long eval, long long prev,
+                   string path) {
+        if (pos == s.size()) {
+            if (eval == target) {
+                ans.push_back(path);
+            }
+            return;
+        }
+
+        for (int i = pos; i < s.size(); i++) {
+            // avoid numbers with leading zeros
+            if (i != pos && s[pos] == '0') break;
+
+            string currStr = s.substr(pos, i - pos + 1);
+            long long curr = stoll(currStr);
+
+            if (pos == 0) {
+                // first number, no operator
+                backtrack(s, target, i + 1, curr, curr, currStr);
+            } else {
+                // '+'
+                backtrack(s, target, i + 1, eval + curr, curr, path + "+" + currStr);
+
+                // '-'
+                backtrack(s, target, i + 1, eval - curr, -curr, path + "-" + currStr);
+
+                // '*'
+                backtrack(s, target, i + 1, eval - prev + prev * curr,
+                          prev * curr, path + "*" + currStr);
+            }
+        }
+    }
+};
