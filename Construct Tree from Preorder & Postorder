@@ -1,0 +1,42 @@
+// User function Template for C++
+
+class Solution {
+public:
+    Node* constructTree(vector<int>& pre, vector<int>& post) {
+        int preIndex = 0;
+        unordered_map<int, int> postIndex;
+        
+        // Map each value in postorder to its index for O(1) lookup
+        for (int i = 0; i < post.size(); i++) {
+            postIndex[post[i]] = i;
+        }
+        
+        return buildTree(pre, post, preIndex, 0, post.size() - 1, postIndex);
+    }
+
+private:
+    Node* buildTree(vector<int>& pre, vector<int>& post, int& preIndex, int left, int right, unordered_map<int, int>& postIndex) {
+        if (preIndex >= pre.size() || left > right) {
+            return nullptr;
+        }
+
+        // Create root node
+        Node* root = new Node(pre[preIndex++]);
+
+        // If leaf node, return it
+        if (left == right || preIndex >= pre.size()) {
+            return root;
+        }
+
+        // Find index of next element (left child) in postorder
+        int idx = postIndex[pre[preIndex]];
+
+        // Build left and right subtrees
+        if (idx <= right) {
+            root->left = buildTree(pre, post, preIndex, left, idx, postIndex);
+            root->right = buildTree(pre, post, preIndex, idx + 1, right - 1, postIndex);
+        }
+
+        return root;
+    }
+};
